@@ -1,6 +1,6 @@
 import copy
 
-from CreateOrder import createOrder
+from CreateOrder import createOrder, joinCreateOrder
 from urlConf import urls
 
 
@@ -35,4 +35,4 @@ def ajPriceProducts(session, product_id):
 
     checkOrderUrls["req_url"] = checkOrderUrls["req_url"].format(session.pid)
     session.httpClint.send(checkOrderUrls)
-    createOrder(session, )
+    joinCreateOrder(session)

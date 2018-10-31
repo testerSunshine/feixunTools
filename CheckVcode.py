@@ -34,7 +34,7 @@ def getVcode(session):
                     break
                 else:
                     session.VCode = ""
-        for _ in range(350):
+        for _ in range(450):
             if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
                 break
             else:

@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 import json
 import os
+import random
 import socket
 from collections import OrderedDict
 from time import sleep
@@ -34,7 +35,9 @@ class HttpClient(object):
         :param headers: Must be a dict. Such as headers={'Content_Type':'text/html'}
         """
         self.initS()
-        self._cdn = "113.107.238.133"
+        self._cdn = ["113.107.238.206", "117.21.219.111", "117.21.219.76", "117.21.219.99", "117.21.219.73", "113.107.238.133", "122.228.238.92", "58.58.81.142", "112.90.216.63", "113.107.238.193", "106.42.25.225", "117.21.219.112", "112.90.216.104", "1.31.128.230", "1.31.128.140", "111.202.98.6", "1.31.128.153", "111.13.147.233", "111.47.226.25", "1.31.128.216", "1.31.128.231", "113.207.76.18",
+                         "1.31.128.213", "1.31.128.139", "183.222.96.250", "1.31.128.217", "111.13.147.234", "112.90.216.82", "111.47.226.161", "183.222.96.234", "1.31.128.245", "1.31.128.203", "111.13.147.215"]
+
 
     def initS(self):
         self._s = requests.Session()
@@ -121,7 +124,7 @@ class HttpClient(object):
                 requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
                                            timeout=20,
-                                           url="https://" + self.cdn + urls["req_url"],
+                                           url="https://" + self._cdn[random.randint(0, len(self._cdn)-1)] + urls["req_url"],
                                            data=data,
                                            allow_redirects=allow_redirects,
                                            verify=False,
@@ -144,7 +147,7 @@ class HttpClient(object):
                         return error_data
                 elif response.status_code == 403:
                     U.Logging.success("ip 被封，{}".format(response.content))
-                    sleep(4)
+                    sleep(2)
                 else:
                     sleep(urls["re_time"])
             except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
