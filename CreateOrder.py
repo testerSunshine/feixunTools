@@ -11,10 +11,10 @@ def createOrder(session, cartMd5, token, addrId):
     下单
     :return:
     """
-    print("阻塞下单，等待验证码中")
+    print("检测到有库存，阻塞下单，等待验证码中")
     while not session.VCode:  # 等待验证码识别成功
         time.sleep(0.01)
-    print("验证码提交通过，下单中")
+    print("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
     createOrderUrls = urls.get("orderCreate", "")
     data = {
         "cart_md5":	cartMd5,
@@ -44,7 +44,7 @@ def joinCreateOrder(session):
     进入下单页
     :return:
     """
-    print("商品缓存完成，账号: {} 正在下单".format(session.userInfo.get("user", "")))
+    print("账号: {} cookie 已种植，正在下单".format(session.userInfo.get("user", "")))
     while not session.orderDone:
         joinCreateOrderUrls = urls.get("checkOrderFast", "")
         joinCreateOrderRsp = session.httpClint.send(joinCreateOrderUrls)
@@ -55,6 +55,7 @@ def joinCreateOrder(session):
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
             addrId = re.search(addrIdRe, joinCreateOrderRsp).group(1)
+            print()
             createOrder(session, cartMd5, token, addrId)
         except (TypeError, AttributeError):
             try:

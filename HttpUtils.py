@@ -146,7 +146,7 @@ class HttpClient(object):
                         error_data["data"] = "url: {} 返回参数为空".format(urls["req_url"])
                         return error_data
                 elif response.status_code == 403:
-                    U.Logging.success("ip 被封，{}".format(response.content))
+                    U.Logging.success("ip 被封, 等待2秒")
                     sleep(2)
                 else:
                     sleep(urls["re_time"])
