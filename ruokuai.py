@@ -33,8 +33,12 @@ class RClient(object):
         }
         params.update(self.base_params)
         files = {'image': ('a.jpg', im)}
-        r = requests.post('http://api.ruokuai.com/create.json', data=params, files=files, headers=self.headers)
-        return r.json()
+        try:
+            r = requests.post('http://api.ruokuai.com/create.json', timeout=10, data=params, files=files,
+                              headers=self.headers)
+            return r.json()
+        except:
+            pass
 
     def rk_report_error(self, im_id):
         """
@@ -60,6 +64,5 @@ class RClient(object):
 
 
 if __name__ == '__main__':
-    rc = RClient('931128603', 'wen1995',)
+    rc = RClient('931128603', 'wen1995', )
     print(rc.get_info())
-

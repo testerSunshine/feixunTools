@@ -14,13 +14,14 @@ def getVcode(session):
     if session.isFastSnap:
         while time.strftime('%H:%M:%S', time.localtime(time.time())) < session.checkVCodeTime:
             pass
-        print("抢购时间点，分开始自动打码")
+        print("抢购时间点，开始自动打码")
     vcodeUrls = copy.copy(urls.get("vcode", ""))
     vcodeUrls["req_url"] = vcodeUrls["req_url"].format(session.loginData.get("member_id"))
     R = RClient(931128603, "wen1995")
     while True:
         if session.orderDone:
             break
+        print("正在下载验证码")
         VcodeRsp = session.httpClint.send(vcodeUrls)
         codeRsp = R.rk_create(VcodeRsp, 4030)
         if codeRsp and codeRsp.get("Result", ""):
@@ -40,7 +41,7 @@ def getVcode(session):
         #             break
         #         else:
         #             session.VCode = ""
-        for _ in range(450):
+        for _ in range(400):
             if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
                 break
             else:

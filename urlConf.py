@@ -70,7 +70,7 @@ urls = {
         "req_type": "post",
         "Referer": "",
         "Host": "mall.phicomm.com",
-        "Content-Type": 1,
+        "Content-Type": 0.1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
