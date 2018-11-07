@@ -1,4 +1,3 @@
-# -*- coding: utf8 -*-
 import json
 import os
 import random
@@ -174,9 +173,9 @@ class HttpClient(object):
                     content = execjs.compile(func_return)
                     evaled_func = content.call('f').replace("document.cookie=", "return ").split("{document.addEventListener")[0].split(";if((function(){try{return")[0]\
                         .replace("window", """[]["filter"]["constructor"]("return this")()""")\
-                        .replace("""setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\\'\\\')',1500);""", "")
+                        .replace("setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\'\\')',1500);", "")
+                    print(evaled_func)
                     evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)
-                    print(evaled_func_re[0])
                     cookie_c = execjs.compile(evaled_func)
                     cookie = cookie_c.call(evaled_func_re[0]).split(";")[0].split("=")
                     self.set_cookies(**{cookie[0]: cookie[1]})
@@ -210,5 +209,7 @@ class HttpClient(object):
 
 
 if __name__ == '__main__':
-    print("__jsl_clearance=1541495718.816|0|XFF2uAifsFUsm5nyxDI6FsnAmXU%3D;Expires=Tue, 06-Nov-18 10:15:18 GMT;Path=/;".split(";")[0])
+    pass
+
+
 

@@ -195,9 +195,9 @@ class FateadmApi():
     #   rsp.err_msg：异常时返回异常详情
     #
     def PredictFromFile(self, pred_type, file_name, head_info=""):
-        with open(file_name, "rb") as f:
-            data = f.read()
-        return self.Predict(pred_type, data, head_info=head_info)
+        # with open(file_name, "rb") as f:
+        #     data = f.read()
+        return self.Predict(pred_type, file_name, head_info=head_info)
 
     #
     # 识别失败，进行退款请求
@@ -306,6 +306,33 @@ class FateadmApi():
     def PredictExtend(self, pred_type, img_data, head_info=""):
         rsp = self.Predict(pred_type, img_data, head_info)
         return rsp.pred_rsp.value
+
+
+def fateadm_code(img):
+    pd_id = "108167"
+    pd_key = "4hyaIk+mpFqccZ77H2c8/zWCnQOYbjzT"
+    app_id = "308167"
+    app_key = "tf5NPYrF72FpuNCE6CbBkRqnC0tTgWkH"
+    pred_type = "40300"
+    api = FateadmApi(app_id, app_key, pd_id, pd_key)
+    # 查询余额
+    balance = api.QueryBalcExtend()
+
+    # 通过文件形式识别：
+    result = api.PredictFromFileExtend(pred_type, img)  # 直接返回识别结果
+    return result
+    # just_flag = False
+    # if just_flag:
+    #     if rsp.ret_code == 0:
+    #         # 识别的结果如果与预期不符，可以调用这个接口将预期不符的订单退款
+    #         # 退款仅在正常识别出结果后，无法通过网站验证的情况，请勿非法或者滥用，否则可能进行封号处理
+    #         api.Justice(rsp.request_id)
+
+    # card_id         = "123"
+    # card_key        = "123"
+    # 充值
+    # api.Charge(card_id, card_key)
+    # LOG("print in testfunc")
 
 
 def TestFunc():

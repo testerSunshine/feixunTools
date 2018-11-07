@@ -1,6 +1,7 @@
 import copy
 import time
 
+from fateadm_api import TestFunc, fateadm_code
 from ruokuai import RClient
 from urlConf import urls
 
@@ -17,15 +18,16 @@ def getVcode(session):
         print("抢购时间点，开始自动打码")
     vcodeUrls = copy.copy(urls.get("vcode", ""))
     vcodeUrls["req_url"] = vcodeUrls["req_url"].format(session.loginData.get("member_id"))
-    R = RClient(931128603, "wen1995")
+    # R = RClient(931128603, "wen1995")
     while True:
         if session.orderDone:
             break
         print("正在下载验证码")
         VcodeRsp = session.httpClint.send(vcodeUrls)
-        codeRsp = R.rk_create(VcodeRsp, 4030)
-        if codeRsp and codeRsp.get("Result", ""):
-            _VCode = codeRsp.get("Result", "")
+        codeRsp = fateadm_code(VcodeRsp)
+        # codeRsp = R.rk_create(VcodeRsp, 4030)
+        if codeRsp:
+            _VCode = codeRsp
             session.VCode = _VCode
             print("验证码识别成功，识别为: {}".format(_VCode))
         # for i in range(2):
