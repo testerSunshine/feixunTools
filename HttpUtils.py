@@ -177,8 +177,11 @@ class HttpClient(object):
                     print(evaled_func)
                     evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)
                     cookie_c = execjs.compile(evaled_func)
-                    cookie = cookie_c.call(evaled_func_re[0]).split(";")[0].split("=")
-                    self.set_cookies(**{cookie[0]: cookie[1]})
+                    try:
+                        cookie = cookie_c.call(evaled_func_re[0]).split(";")[0].split("=")
+                        self.set_cookies(**{cookie[0]: cookie[1]})
+                    except:
+                        pass
                 if response.status_code == 200 or response.status_code == 201:
                     if response.content:
                         if is_logger:

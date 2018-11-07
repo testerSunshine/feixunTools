@@ -17,7 +17,7 @@ def createOrder(session, cartMd5, token, addrId):
     print("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
     createOrderUrls = urls.get("orderCreate", "")
     data = {
-        "cart_md5":	"610cc344dad3a12bf2983af9933ee6bf",
+        "cart_md5":	cartMd5,
         "addr_id":	addrId,
         "dlytype_id": 1,
         "payapp_id": "alipay",
@@ -29,7 +29,7 @@ def createOrder(session, cartMd5, token, addrId):
         "yougouma": "",
         "useVcNum": session.WeiC,
         "useDdwNum": 0,
-        "token": "138bd4305122c1cc9fda3a60a07aeff1",
+        "token": token,
     }
     createOrderRsp = session.httpClint.send(createOrderUrls, data)
     if createOrderRsp and createOrderRsp.get("success", "") == "订单提交成功":
