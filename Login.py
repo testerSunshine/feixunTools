@@ -21,7 +21,6 @@ def login(session):
         if loginRsp and loginRsp.get("success", "") == "登录成功":
             U.Logging.info("账号: {}已登录".format(session.userInfo.get("user", "")))
             session.loginData = loginRsp.get("data", "")
-            # searchOrderInfo(session)
             goodsDetail(session)
             break
         else:

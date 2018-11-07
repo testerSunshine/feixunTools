@@ -14,4 +14,3 @@ for _ in range(1000):
         cdn.append(_cdn)
     print("cdn节点: {}, 延时: {}ms".format(_cdn, _timeOut))
     time.sleep(1)
-s

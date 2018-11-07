@@ -4,6 +4,7 @@ import time
 from CheckOrder import goodsProducts
 from CheckVcode import getVcode
 from HttpUtils import HttpClient
+from SearchOrderInfo import searchOrderInfo
 from urlConf import urls
 import random
 
@@ -16,9 +17,12 @@ def goodsDetail(session,):
     """
     getGoodsDetailUrls = copy.copy(urls["getGoodsDetail"])
     getGoodsDetailUrls["req_url"] = getGoodsDetailUrls["req_url"].format(session.pid)
-    t = threading.Thread(target=getVcode, args=(session,))
+    t = threading.Thread(target=getVcode, args=(session,))  # 验证码线程
     t.setDaemon(True)
     t.start()
+    t2 = threading.Thread(target=searchOrderInfo, args=(session,))  # 查询订单线程
+    t2.setDaemon(True)
+    t2.start()
 
     goodsDetailRsp = session.httpClint.send(getGoodsDetailUrls)
 

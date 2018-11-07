@@ -4,6 +4,7 @@ import threading
 import time
 from json import JSONDecodeError
 import Utils as U
+from emailConf import sendEmail
 from fateadm_api import fateadmJustice
 
 from urlConf import urls
@@ -37,7 +38,7 @@ def createOrder(session, cartMd5, token, addrId):
     createOrderRsp = session.httpClint.send(createOrderUrls, data)
     if createOrderRsp and createOrderRsp.get("success", "") == "订单提交成功":
         U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp.get("success", "")))
-
+        sendEmail("订单提交成功", session.userInfo.get("user", ""))
         session.orderDone = True
     elif createOrderRsp.get("error") == "验证码错误":
         U.Logging.info("验证码错误")
