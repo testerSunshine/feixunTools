@@ -16,36 +16,6 @@ PATH = lambda p: os.path.abspath(
 )
 
 
-def cookie_exec(timeStr="", cookieStr=""):
-    """
-    获取cookie
-    :return:
-    """
-    return execjs.compile("""
-    var _14 = function () {
-    return '__jsl_clearance=""" + timeStr + """|0|' + (function () {
-        return [
-            [(-~{} + [(+!~~![]) + (+!~~![])] >> (+!~~![]) + (+!~~![])) + ((+!~~![]) + [~~'']) / [(-~~~![] << -~~~![])]], 'B', ['mall.phicomm.com' + [] + [
-                []
-            ][0]][0].charAt(((-~~~![] << -~~~![]) << -~{}) + ((-~~~![] << -~~~![]) << -~{})) + [+[-~{}, -~{}] + []][0].charAt((+!~~![]) + (+!~~![])) + [+[-~{}, -~{}] + []][0].charAt((+!~~![]) + (+!~~![])) + [-~{} + 5], 'M', (![] + [] + []).charAt(-~(((+!~~![]) + (+!~~![]) ^ -~[]))), 'KmwW', ['mall.phicomm.com' + []][0].charAt((+!~~![]) - ~!/!/ - ~-~[]) + (-~[] + [] + [
-                []
-            ][0]), 'JV', [{} + [] + [
-                []
-            ][0]][0].charAt((-~[] + [] + [
-                []
-            ][0]) + [~~
-                []
-            ]), 'MW', [
-                [] / !{} + [
-                    []
-                ][0]
-            ][0].charAt(-~[]), 'PSz', [!-{} + [] + []][0].charAt(-~!/!/) + ({} + []).charAt(-~[(-~{} + [(+!~~![]) + (+!~~![])] >> (+!~~![]) + (+!~~![])) + ((-~~~![] << -~~~![])) * [(-~~~![] << -~~~![])]]), 'J', ({} + [] + []).charAt(([-~-~[]] + ~~![] >> -~-~[])), '%', [(-~[] | (+!~~![]) + (+!~~![]))], 'D'
-        ].join('')
-    })()
-}
-    """)
-
-
 def _set_header_default():
     header_dict = OrderedDict()
     header_dict["Accept"] = "*/*"
@@ -152,7 +122,7 @@ class HttpClient(object):
             self.setHeaders({"Content-Type": data.content_type})
             self.setHeaders(urls.get("headers", {}))
         if is_logger:
-            U.Logging.success(
+            U.Logging.info(
                 "url: {0}\n入参: {1}\n请求方式: {2}\n".format(urls["req_url"], data, method, ))
         self.setHeadersHost(urls["Host"])
         for i in range(urls["re_try"]):
@@ -174,18 +144,18 @@ class HttpClient(object):
                     evaled_func = content.call('f').replace("document.cookie=", "return ").split("{document.addEventListener")[0].split(";if((function(){try{return")[0]\
                         .replace("window", """[]["filter"]["constructor"]("return this")()""")\
                         .replace("setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\'\\')',1500);", "")
-                    print(evaled_func)
                     evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)
                     cookie_c = execjs.compile(evaled_func)
                     try:
                         cookie = cookie_c.call(evaled_func_re[0]).split(";")[0].split("=")
+                        U.Logging.info("当前种植cookie为: {}".format(cookie))
                         self.set_cookies(**{cookie[0]: cookie[1]})
                     except:
                         pass
                 if response.status_code == 200 or response.status_code == 201:
                     if response.content:
                         if is_logger:
-                            U.Logging.success(
+                            U.Logging.info(
                                 "出参：{0}".format(response.content.decode()))
                         if urls["is_json"]:
                             return json.loads(response.content.decode())
@@ -194,12 +164,12 @@ class HttpClient(object):
                         else:
                             return response.content.decode()
                     else:
-                        U.Logging.success(
+                        U.Logging.info(
                             "url: {} 返回参数为空".format(urls["req_url"]))
                         error_data["data"] = "url: {} 返回参数为空".format(urls["req_url"])
                         return error_data
                 elif response.status_code == 403:
-                    U.Logging.success("ip 被封, 等待2秒")
+                    U.Logging.error("ip 被封, 等待2秒")
                     sleep(2)
                 else:
                     sleep(urls["re_time"])

@@ -72,7 +72,7 @@ urls = {
         "Host": "mall.phicomm.com",
         "Content-Type": 0.1,
         "re_try": 10,
-        "re_time": 0.1,
+        "re_time": 2,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,

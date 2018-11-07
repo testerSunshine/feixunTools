@@ -1,5 +1,7 @@
 from GoodsDetail import goodsDetail
+from SearchOrderInfo import searchOrderInfo
 from urlConf import urls
+import Utils as U
 
 
 def login(session):
@@ -17,9 +19,10 @@ def login(session):
     while True:
         loginRsp = session.httpClint.send(loginUrls, data)
         if loginRsp and loginRsp.get("success", "") == "登录成功":
-            print("账号: {}已登录".format(session.userInfo.get("user", "")))
+            U.Logging.info("账号: {}已登录".format(session.userInfo.get("user", "")))
             session.loginData = loginRsp.get("data", "")
+            # searchOrderInfo(session)
             goodsDetail(session)
             break
         else:
-            print(loginRsp.get("error", ""))
+            U.Logging.error(loginRsp.get("error", ""))

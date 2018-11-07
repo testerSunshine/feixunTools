@@ -213,7 +213,6 @@ class FateadmApi():
     #
     def Justice(self, request_id):
         if request_id == "":
-            #
             return
         tm = str(int(time.time()))
         sign = CalcSign(self.pd_id, self.pd_key, tm)
@@ -308,19 +307,31 @@ class FateadmApi():
         return rsp.pred_rsp.value
 
 
-def fateadm_code(img):
-    pd_id = "108167"
-    pd_key = "4hyaIk+mpFqccZ77H2c8/zWCnQOYbjzT"
-    app_id = "308167"
-    app_key = "tf5NPYrF72FpuNCE6CbBkRqnC0tTgWkH"
+PD_ID = "108167"
+PD_KEY = "4hyaIk+mpFqccZ77H2c8/zWCnQOYbjzT"
+APP_ID = "308167"
+APP_KEY = "tf5NPYrF72FpuNCE6CbBkRqnC0tTgWkH"
+
+
+def fateadmJustice(request_id):
+    pd_id = PD_ID
+    pd_key = PD_KEY
+    app_id = APP_ID
+    app_key = APP_KEY
+    api = FateadmApi(app_id, app_key, pd_id, pd_key)
+    api.Justice(request_id)
+
+
+def fateadm_code(img=None,):
+    pd_id = PD_ID
+    pd_key = PD_KEY
+    app_id = APP_ID
+    app_key = APP_KEY
     pred_type = "40300"
     api = FateadmApi(app_id, app_key, pd_id, pd_key)
-    # 查询余额
-    balance = api.QueryBalcExtend()
-
     # 通过文件形式识别：
-    result = api.PredictFromFileExtend(pred_type, img)  # 直接返回识别结果
-    return result
+    rsp = api.PredictFromFile(pred_type, img)  # 直接返回识别结果
+    return rsp.pred_rsp.value, rsp.request_id
     # just_flag = False
     # if just_flag:
     #     if rsp.ret_code == 0:
