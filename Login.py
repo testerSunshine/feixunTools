@@ -24,4 +24,4 @@ def login(session):
             goodsDetail(session)
             break
         else:
-            U.Logging.error(loginRsp.get("error", ""))
+            U.Logging.error("账号: {} 错误信息: {}".format(session.userInfo.get("user", ""), loginRsp.get("error", "")))

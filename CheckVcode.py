@@ -15,7 +15,7 @@ def getVcode(session):
     if session.isFastSnap:
         while time.strftime('%H:%M:%S', time.localtime(time.time())) < session.checkVCodeTime:
             pass
-            U.Logging.info("抢购时间点，开始自动打码")
+    U.Logging.info("抢购时间点，开始自动打码")
     vcodeUrls = copy.copy(urls.get("vcode", ""))
     vcodeUrls["req_url"] = vcodeUrls["req_url"].format(session.loginData.get("member_id"))
     # R = RClient(931128603, "wen1995")
