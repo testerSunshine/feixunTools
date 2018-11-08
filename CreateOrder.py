@@ -42,7 +42,7 @@ def createOrder(session, cartMd5, token, addrId):
         session.orderDone = True
     elif createOrderRsp.get("error") == "验证码错误":
         U.Logging.info("验证码错误")
-        createOrderThread = threading.Thread(target=fateadmJustice, args=(session.request_id, ))
+        createOrderThread = threading.Thread(target=fateadmJustice, args=(session.request_id, ))  # 打码错误调取退款接口
         createOrderThread.setDaemon(True)
         createOrderThread.start()
         session.VCode = ""
