@@ -19,7 +19,6 @@ def createOrder(session, cartMd5, token, addrId):
     while not session.VCode:  # 等待验证码识别成功
         time.sleep(0.01)
     U.Logging.info("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
-    createOrderUrls = urls.get("orderCreate", "")
     data = {
         "cart_md5":	cartMd5,
         "addr_id":	addrId,
@@ -35,14 +34,31 @@ def createOrder(session, cartMd5, token, addrId):
         "useDdwNum": 0,
         "token": token,
     }
-    createOrderRsp = session.httpClint.send(createOrderUrls, data)
+    createOrderThreadPool = []
+    for i in range(3):
+        t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
+        t.setDaemon(True)
+        createOrderThreadPool.append(t)
+    for t in createOrderThreadPool:
+        t.start()
+
+
+def createOrderThread(data, session, ThreadId):
+    """
+    提交订单线程
+    :param data:
+    :param session:
+    :return:
+    """
+    U.Logging.info("订单线程{}启动..".format(ThreadId))
+    createOrderRsp = session.httpClint.send(urls.get("orderCreate", ""), data)
     if createOrderRsp and createOrderRsp.get("success", "") == "订单提交成功":
         U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp.get("success", "")))
-        sendEmail("订单提交成功", session.userInfo.get("user", ""))
         session.orderDone = True
+        sendEmail("(接口返回成功，无订单号)", session.userInfo.get("user", ""))
     elif createOrderRsp.get("error") == "验证码错误":
         U.Logging.info("验证码错误")
-        createOrderThread = threading.Thread(target=fateadmJustice, args=(session.request_id, ))  # 打码错误调取退款接口
+        createOrderThread = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
         createOrderThread.setDaemon(True)
         createOrderThread.start()
         session.VCode = ""
