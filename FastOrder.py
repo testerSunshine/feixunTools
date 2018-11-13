@@ -38,7 +38,7 @@ def parser_arguments(argv):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--account", type=str, default="", help="账号，必填！")
-    parser.add_argument("--email", type=int, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
+    parser.add_argument("--email", type=str, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
     parser.add_argument("--FastSnap", type=bool, default=False, help="是否开启踩点打码")
     parser.add_argument("--pid", type=int, default=0, help="商品id")
     parser.add_argument("--WeiC", type=int, default=0, help="商品对打使用维C数量")
@@ -52,22 +52,17 @@ if __name__ == '__main__':
     FastSnap = args.FastSnap
     pid = args.pid
     WeiC = args.WeiC
-    if account and email and pid and WeiC:
+    if account and pid and WeiC:
         U.Logging.info(account)
         U.Logging.info(email)
         U.Logging.info(FastSnap)
         U.Logging.info(pid)
         U.Logging.info(WeiC)
-    # account = [
-    #     {"user": "18983788725", "pwd": "880418"},
-    #     {"user": "15330501819", "pwd": "880418"},
-    #     {"user": "17783082325", "pwd": "880418"},
-    #     {"user": "17783082725", "pwd": "880418"},
-    #     {"user": "18723129757", "pwd": "880418"},
-    # ]
         threadingPool = []
         for userInfo in eval(account):
             u = fastOrderThread(userInfo, email, FastSnap, pid, WeiC)
             threadingPool.append(u)
         for t in threadingPool:
             t.start()
+    else:
+        U.Logging.info("必填参数不能为空")
