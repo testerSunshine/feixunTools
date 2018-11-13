@@ -14,10 +14,10 @@ class fastOrderThread(threading.Thread):
         self.loginData = {}
         self.request_id = ""
         self.orderDone = False
-        self.pid = 5
-        self.WeiC = 0
+        self.pid = 13
+        self.WeiC = 23900
         self.checkVCodeTime = "10:59:55"
-        self.isFastSnap = False  # 抢购时间点踩点打码，如果是测试，设置为False
+        self.isFastSnap = True  # 抢购时间点踩点打码，如果是测试，设置为False
 
     def run(self):
         """
