@@ -12,7 +12,7 @@ def searchOrderInfo(session):
     :param session:
     :return:
     """
-    U.Logging.info("查询线程开始启动...")
+    U.Logging.info("账号：{} 查询线程开始启动...".format(session.userInfo.get("user", "")))
     while not session.orderDone:
         searchOrderInfoRsp = session.httpClint.send(urls.get("myOrder", ""))
         if searchOrderInfoRsp:
@@ -25,7 +25,7 @@ def searchOrderInfo(session):
                 sendEmail(orderId, session.userInfo.get("user", ""))
                 session.orderDone = True
             else:
-                U.Logging.error("查询失败")
+                U.Logging.error("账号：{}订单查询失败".format(session.userInfo.get("user", "")))
 
 
 if __name__ == '__main__':

@@ -89,7 +89,6 @@ class colour:
 class Logging:
     def __init__(self):
         pass
-
     flag = True
 
     @staticmethod

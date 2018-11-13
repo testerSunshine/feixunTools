@@ -139,35 +139,43 @@ class HttpClient(object):
                                            verify=False,
                                            **kwargs)
                 if response.status_code == 521:
-                    txt_521 = ''.join(re.findall('<script>(.*?)</script>', response.content.decode()))
-                    func_return = txt_521.replace('eval', 'return')
-                    content = execjs.compile(func_return)
-                    evaled_func = content.call('f').replace("document.cookie=", "return ").split("{document.addEventListener")[0].split(";if((function(){try{return")[0]\
-                        .replace("window", """[]["filter"]["constructor"]("return this")()""")\
-                        .replace("setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\'\\')',1500);", "")
-                    evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)[0]
-                    evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
-                    evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
-                    evaled_func_2 = evaled_func.replace("var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
-                                                      .format(evaled_func_re,
-                                                              evaled_func_re,
-                                                              evaled_func_reb,
-                                                              evaled_func_re,
-                                                              evaled_func_re,
-                                                              evaled_func_rea,
-                                                              evaled_func_re,
-                                                              evaled_func_re,
-                                                              evaled_func_re,
-                                                              evaled_func_rea,
-                                                              ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
-                                                                    evaled_func_rea, evaled_func_re))\
-                                                .replace("return return", "return") \
-                                                .replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re))
-                    cookie_c = execjs.compile(evaled_func_2)
-                    cookie = cookie_c.call(evaled_func_re).split(";")[0].split("=")
-                    U.Logging.info("当前种植cookie为: {}".format(cookie))
-                    self.set_cookies(**{cookie[0]: cookie[1]})
-
+                    try:
+                        txt_521 = ''.join(re.findall('<script>(.*?)</script>', response.content.decode()))
+                        func_return = txt_521.replace('eval', 'return')
+                        content = execjs.compile(func_return)
+                        evaled_func = content.call('f').replace("document.cookie=", "return ").split("{document.addEventListener")[0].split(";if((function(){try{return")[0]\
+                            .replace("window", """[]["filter"]["constructor"]("return this")()""")\
+                            .replace("setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\'\\')',1500);", "")
+                        evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)[0]
+                        evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
+                        evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
+                        evaled_func_2 = evaled_func.replace("var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
+                                                          .format(evaled_func_re,
+                                                                  evaled_func_re,
+                                                                  evaled_func_reb,
+                                                                  evaled_func_re,
+                                                                  evaled_func_re,
+                                                                  evaled_func_rea,
+                                                                  evaled_func_re,
+                                                                  evaled_func_re,
+                                                                  evaled_func_re,
+                                                                  evaled_func_rea,
+                                                                  ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
+                                                                        evaled_func_rea, evaled_func_re))\
+                                                    .replace("return return", "return") \
+                                                    .replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re))
+                        cookie_c = execjs.compile(evaled_func_2)
+                        print(evaled_func_2)
+                        cookie = cookie_c.call(evaled_func_re).split(";")[0].split("=")
+                        if cookie[1].find("\x00") != -1:
+                            U.Logging.error("无效cookie: {}".format(cookie))
+                            continue
+                        self.set_cookies(**{cookie[0]: cookie[1]})
+                    except:
+                        pass
+                if response.status_code == 400:
+                    U.Logging.error("400返回，重新 生成cookie")
+                    self.del_cookies_by_key("__jsl_clearance")
                 if response.status_code == 200 or response.status_code == 201:
                     if response.content:
                         if is_logger:
