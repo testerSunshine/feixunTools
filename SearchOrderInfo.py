@@ -22,7 +22,7 @@ def searchOrderInfo(session):
                 orderRe = re.compile(r'order:\[{"order_id":"(\S+)","uid":')
                 orderId = re.search(orderRe, searchOrderInfoRsp).group(1)
                 U.Logging.info("账号: {} 查询到待付款订单，订单号: {}".format(session.userInfo.get("user", ""), orderId,))
-                sendEmail(orderId, session.userInfo.get("user", ""))
+                sendEmail(orderId, session.userInfo.get("user", ""), session.email)
                 session.orderDone = True
             else:
                 U.Logging.error("账号：{}订单查询失败".format(session.userInfo.get("user", "")))

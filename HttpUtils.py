@@ -160,7 +160,7 @@ class HttpClient(object):
                                                                   evaled_func_re,
                                                                   evaled_func_re,
                                                                   evaled_func_rea,
-                                                                  ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
+                                                                  ), 'var {0}="https://";var {1}="mall.phicomm.com/"'.format(
                                                                         evaled_func_rea, evaled_func_re))\
                                                     .replace("return return", "return") \
                                                     .replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re))
@@ -173,9 +173,9 @@ class HttpClient(object):
                         self.set_cookies(**{cookie[0]: cookie[1]})
                     except:
                         pass
-                if response.status_code == 400:
-                    U.Logging.error("400返回，重新 生成cookie")
-                    self.del_cookies_by_key("__jsl_clearance")
+                # if response.status_code == 400:
+                #     U.Logging.error("400返回，重新 生成cookie")
+                #     self.del_cookies_by_key("__jsl_clearance")
                 if response.status_code == 200 or response.status_code == 201:
                     if response.content:
                         if is_logger:
@@ -206,7 +206,10 @@ class HttpClient(object):
 
 
 if __name__ == '__main__':
-    pass
+    a = execjs.compile("""
+    var _37=function(){return '__jsl_clearance=1542106851.717|0|'+(function(){var _3d=[function(_37){return _37},function(_3d){return _3d},(function(){var _3d = "https://"; var _37 = "mall.phicomm.com/";return function(_3d){for(var _38=0;_38<_3d.length;_38++){_3d[_38]=_37.charAt(_3d[_38])};return _3d.join('')}})(),function(_37){return String.fromCharCode(_37)}],_38=['8',[-~[]+(-~-~~~''^-~~~'')+5],[((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])+[-~[]+(-~-~~~''^-~~~'')+5]],[[-~[]+(-~-~~~''^-~~~'')+5]],'XwU',[(-~{}+[[]][0])+(-~[]-~[]+[]+[])+(-~[]-~[]+[]+[])],'zn',[(-~{}+[[]][0])],[(-~{}+[[]][0])+(-~{}+[[]][0])+((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])],'U',[((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])+[-~[]+(-~-~~~''^-~~~'')+5]],'3',[[-~[6]]+(~~''+[]+[])],[![]+[]+[[]][0]][0].charAt((-~~~''+[2]>>2)),'I',[-~(4)],'Ut',[(-~{}+[[]][0])+(-~{}+[[]][0])+[-~[]+(-~-~~~''^-~~~'')+5]],({}+[]).charAt(-~(8))+(~~''+[]+[]),'txc',[[(-~-~~~''^-~~~'')]+[-~[6]]],'3D'];for(var _37=0;_37<_38.length;_37++){_38[_37]=_3d[[1,0,3,2,1,3,1,2,3,1,3,1,3,0,1,0,1,3,0,1,3,1][_37]](_38[_37])};return _38.join('')})()+';Expires=Tue, 13-Nov-18 12:00:51 GMT;Path=/;'}
+    """)
+    print(a.call("_37"))
 
 
 

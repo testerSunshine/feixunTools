@@ -7,14 +7,14 @@ from email.mime.text import MIMEText
 import smtplib
 
 
-def sendEmail(msg, account):
+def sendEmail(msg, account, email):
     """
     邮件通知
     :param str: email content
     :return:
     """
     sender = "931128603@qq.com"
-    receiver = "931128603@qq.com"
+    receiver = email
     subject = '恭喜，账号: {} 在{}已抢购成功, 请登录官网立即付款！！！'.format(account, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),)
     username = "931128603@qq.com"
     password = "xrvenridfpnnbehh"
