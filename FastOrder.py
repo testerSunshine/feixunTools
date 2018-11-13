@@ -15,7 +15,7 @@ class fastOrderThread(threading.Thread):
         self.request_id = ""
         self.orderDone = False
         self.pid = 13
-        self.WeiC = 23900
+        self.WeiC = 29900
         self.checkVCodeTime = "10:59:55"
         self.isFastSnap = True  # 抢购时间点踩点打码，如果是测试，设置为False
 
@@ -29,14 +29,11 @@ class fastOrderThread(threading.Thread):
 
 if __name__ == '__main__':
     account = [
-        # {"user": "15624288288", "pwd": "xwg888888"},
-        # {"user": "18765580967", "pwd": "xwg88888"},
-        # {"user": "13078526201", "pwd": "feixun666"},
-        # {"user": "13078561905", "pwd": "feixun666"},
-        # {"user": "13027868397", "pwd": "feixun666"},
-
-        {"user": "13064018566", "pwd": "wj848888"},
-        # {"user": "13869179286", "pwd": "848888"},
+        {"user": "18983788725", "pwd": "880418"},
+        {"user": "15330501819", "pwd": "880418"},
+        {"user": "17783082325", "pwd": "880418"},
+        {"user": "17783082725", "pwd": "880418"},
+        {"user": "18723129757", "pwd": "880418"},
     ]
     threadingPool = []
     for userInfo in account:
