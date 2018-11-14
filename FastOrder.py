@@ -15,6 +15,7 @@ class fastOrderThread(threading.Thread):
         self.userInfo = userInfo
         self.httpClint = HttpClient()
         self.email = email
+        self.addrId = ""
         self.VCode = ""
         self.loginData = {}
         self.request_id = ""
@@ -40,6 +41,7 @@ def parser_arguments(argv):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--account", type=str, default="", required=True, help="账号，必填！")
+    parser.add_argument("--pwd", type=str, default="", required=True, help="密码，必填！")
     parser.add_argument("--email", type=str, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
     parser.add_argument("--FastSnap", type=int, default=0, help="是否开启踩点打码, 0关闭，1开启")
     parser.add_argument("--pid", type=int, default=0, required=True, help="商品id")
@@ -50,18 +52,23 @@ def parser_arguments(argv):
 if __name__ == '__main__':
     args = parser_arguments(sys.argv[1:])
     account = args.account
+    pwd = args.pwd
     email = args.email
     FastSnap = args.FastSnap
     pid = args.pid
     WeiC = args.WeiC
-    if account and pid and WeiC:
+    if account and pwd and pid:
         U.Logging.info(account)
+        U.Logging.info(pwd)
         U.Logging.info(email)
         U.Logging.info(FastSnap)
         U.Logging.info(pid)
         U.Logging.info(WeiC)
         threadingPool = []
-        for userInfo in eval(account):
+        accounts = account.split(",")
+        pwds = pwd.split(",")
+        for i in range(len(accounts)):
+            userInfo = {"user": accounts[i], "pwd": pwds[i]}
             u = fastOrderThread(userInfo, email, FastSnap, pid, WeiC)
             threadingPool.append(u)
         for t in threadingPool:

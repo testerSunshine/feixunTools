@@ -161,4 +161,16 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
+    "receiver": {  # 收货地址
+        "req_url": "/m/my-receiver.html",
+        "req_type": "get",
+        "Referer": "",
+        "Host": "mall.phicomm.com",
+        "Content-Type": 1,
+        "re_try": 10,
+        "re_time": 5,
+        "s_time": 5,
+        "is_logger": False,
+        "is_json": False,
+    },
 }

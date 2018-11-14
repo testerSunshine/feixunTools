@@ -4,6 +4,7 @@ import time
 from CheckOrder import goodsProducts
 from CheckVcode import getVcode
 from HttpUtils import HttpClient
+from Receiver import receiver
 from SearchOrderInfo import searchOrderInfo
 from urlConf import urls
 import random
@@ -15,6 +16,7 @@ def goodsDetail(session,):
     :param session:
     :return:
     """
+    receiver(session)
     getGoodsDetailUrls = copy.copy(urls["getGoodsDetail"])
     getGoodsDetailUrls["req_url"] = getGoodsDetailUrls["req_url"].format(session.pid)
     t = threading.Thread(target=getVcode, args=(session,))  # 验证码线程

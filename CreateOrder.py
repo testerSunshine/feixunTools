@@ -21,7 +21,7 @@ def createOrder(session, cartMd5, token, addrId):
     U.Logging.info("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
     data = {
         "cart_md5":	cartMd5,
-        "addr_id":	addrId,
+        "addr_id":	session.addrId,
         "dlytype_id": 1,
         "payapp_id": "alipay",
         "need_invoice":	"true",
@@ -75,12 +75,10 @@ def joinCreateOrder(session):
         joinCreateOrderRsp = session.httpClint.send(joinCreateOrderUrls)
         cartMd5Re = re.compile(r'cart_md5:"(\S+)"')
         tokenRe = re.compile(r"'token':'(\S+)'")
-        addrIdRe = re.compile(r'{"addr_id":"(\S+)"')
         try:
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
-            addrId = re.search(addrIdRe, joinCreateOrderRsp).group(1)
-            createOrder(session, cartMd5, token, addrId)
+            createOrder(session, cartMd5, token, "")
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
@@ -90,4 +88,7 @@ def joinCreateOrder(session):
 
 
 if __name__ == '__main__':
-    print(joinCreateOrder(session=""))
+    a = '11111111111111111'
+    addrIdRe = re.compile(r'{"addr_id":"(\S+)"')
+    addrId = re.search(addrIdRe, a).group(1) or "11"
+    print()
