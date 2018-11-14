@@ -21,7 +21,11 @@ def login(session):
         if loginRsp and loginRsp.get("success", "") == "登录成功":
             U.Logging.info("账号: {}已登录".format(session.userInfo.get("user", "")))
             session.loginData = loginRsp.get("data", "")
-            goodsDetail(session)
-            break
+            if session.FastType is 0:  # 下单
+                goodsDetail(session)
+                break
+            elif session.FastType is 1:  # 查单
+                searchOrderInfo(session)
+                break
         else:
             U.Logging.error("账号: {} 错误信息: {}".format(session.userInfo.get("user", ""), loginRsp.get("error", "")))

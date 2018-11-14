@@ -17,7 +17,11 @@ def searchOrderInfo(session):
         searchOrderInfoRsp = session.httpClint.send(urls.get("myOrder", ""))
         if searchOrderInfoRsp:
             if searchOrderInfoRsp.find("您还没有相关订单哦") != -1:
-                time.sleep(5)
+                if session.FastType is 1:  # 如果是查订单的话，就只查一次
+                    U.Logging.info("账号：{} 无待付款订单".format(session.userInfo.get("user", "")))
+                    break
+                else:
+                    time.sleep(5)
             elif searchOrderInfoRsp.find("订单号：") != -1:
                 orderRe = re.compile(r'order:\[{"order_id":"(\S+)","uid":')
                 orderId = re.search(orderRe, searchOrderInfoRsp).group(1)

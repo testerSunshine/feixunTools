@@ -8,7 +8,7 @@ import Utils as U
 
 
 class fastOrderThread(threading.Thread):
-    def __init__(self, userInfo, email, FastSnap, pid, WeiC):
+    def __init__(self, userInfo, email, FastSnap, pid, WeiC, FastType):
         threading.Thread.__init__(self)
         U.Logging.info("线程{} 正在执行，登录账号为：{}".format(userInfo["user"], userInfo["user"]))
 
@@ -24,6 +24,7 @@ class fastOrderThread(threading.Thread):
         self.WeiC = WeiC
         self.checkVCodeTime = "10:59:55"
         self.isFastSnap = FastSnap  # 抢购时间点踩点打码，如果是测试，设置为False
+        self.FastType = FastType  # 查单脚本，防止订单丢失
 
     def run(self):
         """
@@ -41,6 +42,7 @@ def parser_arguments(argv):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--account", type=str, default="", required=True, help="账号，必填！")
+    parser.add_argument("--FastType", type=int, default=0, required=True, help="0下单，1查单")
     parser.add_argument("--pwd", type=str, default="", required=True, help="密码，必填！")
     parser.add_argument("--email", type=str, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
     parser.add_argument("--FastSnap", type=int, default=0, help="是否开启踩点打码, 0关闭，1开启")
@@ -55,6 +57,7 @@ if __name__ == '__main__':
     pwd = args.pwd
     email = args.email
     FastSnap = args.FastSnap
+    FastType = args.FastType
     pid = args.pid
     WeiC = args.WeiC
     if account and pwd and pid:
@@ -62,6 +65,7 @@ if __name__ == '__main__':
         U.Logging.info(pwd)
         U.Logging.info(email)
         U.Logging.info(FastSnap)
+        U.Logging.info(FastType)
         U.Logging.info(pid)
         U.Logging.info(WeiC)
         threadingPool = []
@@ -69,7 +73,7 @@ if __name__ == '__main__':
         pwds = pwd.split(",")
         for i in range(len(accounts)):
             userInfo = {"user": accounts[i], "pwd": pwds[i]}
-            u = fastOrderThread(userInfo, email, FastSnap, pid, WeiC)
+            u = fastOrderThread(userInfo, email, FastSnap, pid, WeiC, FastType)
             threadingPool.append(u)
         for t in threadingPool:
             t.start()
