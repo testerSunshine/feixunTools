@@ -22,7 +22,7 @@ urls = {
         "Referer": "https://mall.phicomm.com/m/passport-login.html",
         "Host": "mall.phicomm.com",
         "Content-Type": 1,
-        "re_try": 10,
+        "re_try": 100,
         "re_time": 2,
         "s_time": 2,
         "is_logger": False,

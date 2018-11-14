@@ -11,9 +11,11 @@ class fastOrderThread(threading.Thread):
     def __init__(self, userInfo, email, FastSnap, pid, WeiC):
         threading.Thread.__init__(self)
         U.Logging.info("线程{} 正在执行，登录账号为：{}".format(userInfo["user"], userInfo["user"]))
+
         self.userInfo = userInfo
         self.httpClint = HttpClient()
         self.email = email
+        self.VCode = ""
         self.loginData = {}
         self.request_id = ""
         self.orderDone = False
@@ -37,11 +39,11 @@ def parser_arguments(argv):
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--account", type=str, default="", help="账号，必填！")
+    parser.add_argument("--account", type=str, default="", required=True, help="账号，必填！")
     parser.add_argument("--email", type=str, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
-    parser.add_argument("--FastSnap", type=bool, default=False, help="是否开启踩点打码")
-    parser.add_argument("--pid", type=int, default=0, help="商品id")
-    parser.add_argument("--WeiC", type=int, default=0, help="商品对打使用维C数量")
+    parser.add_argument("--FastSnap", type=int, default=0, help="是否开启踩点打码, 0关闭，1开启")
+    parser.add_argument("--pid", type=int, default=0, required=True, help="商品id")
+    parser.add_argument("--WeiC", type=int, default=0, required=True, help="商品对打使用维C数量")
     return parser.parse_args(argv)
 
 

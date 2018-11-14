@@ -18,14 +18,12 @@ def getVcode(session):
     U.Logging.info("抢购时间点，开始自动打码")
     vcodeUrls = copy.copy(urls.get("vcode", ""))
     vcodeUrls["req_url"] = vcodeUrls["req_url"].format(session.loginData.get("member_id"))
-    # R = RClient(931128603, "wen1995")
     while True:
         if session.orderDone:
             break
         U.Logging.info("正在下载验证码")
         VcodeRsp = session.httpClint.send(vcodeUrls)
         codeRsp, request_id = fateadm_code(VcodeRsp)
-        # codeRsp = R.rk_create(VcodeRsp, 4030)
         if codeRsp:
             session.request_id = request_id
             _VCode = codeRsp
