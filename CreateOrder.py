@@ -35,7 +35,7 @@ def createOrder(session, cartMd5, token, addrId):
         "token": token,
     }
     createOrderThreadPool = []
-    for i in range(3):
+    for i in range(4):
         t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
         t.setDaemon(True)
         createOrderThreadPool.append(t)

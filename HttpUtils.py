@@ -117,7 +117,7 @@ class HttpClient(object):
             # self.setHeaders({"Content-Length": "{0}".format(len(data))})
         else:
             method = "get"
-            self.resetHeaders()
+            # self.resetHeaders()
         if "is_multipart_data" in urls and urls["is_multipart_data"]:
             data = MultipartEncoder(data)
             self.setHeaders({"Content-Type": data.content_type})
@@ -149,25 +149,24 @@ class HttpClient(object):
                         print(evaled_func)
                         evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)[0]
 
-                        evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
-                        evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
-                        evaled_func_2 = evaled_func.replace(
-                            "var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
-                            .format(evaled_func_re,
-                                    evaled_func_re,
-                                    evaled_func_reb,
-                                    evaled_func_re,
-                                    evaled_func_re,
-                                    evaled_func_rea,
-                                    evaled_func_re,
-                                    evaled_func_re,
-                                    evaled_func_re,
-                                    evaled_func_rea,
-                                    ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
-                                evaled_func_rea, evaled_func_re))
+                        # evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
+                        # evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
+                        # evaled_func_2 = evaled_func.replace(
+                        #     "var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
+                        #     .format(evaled_func_re,
+                        #             evaled_func_re,
+                        #             evaled_func_reb,
+                        #             evaled_func_re,
+                        #             evaled_func_re,
+                        #             evaled_func_rea,
+                        #             evaled_func_re,
+                        #             evaled_func_re,
+                        #             evaled_func_re,
+                        #             evaled_func_rea,
+                        #             ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
+                        #         evaled_func_rea, evaled_func_re))
                         # evaled_func_2 = evaled_func.replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re)).replace("return return", "return")
-                        cookie_c = execjs.compile(evaled_func_2)
-                        print(evaled_func_2)
+                        cookie_c = execjs.compile(evaled_func)
                         cookie = cookie_c.call(evaled_func_re).split(";")[0].split("=")
                         if cookie[1].find("\x00") != -1:
                             U.Logging.error("无效cookie: {}".format(cookie))

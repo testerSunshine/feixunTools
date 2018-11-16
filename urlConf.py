@@ -173,4 +173,16 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
+    "m": {  # 主页
+        "req_url": "/m/",
+        "req_type": "get",
+        "Referer": "",
+        "Host": "mall.phicomm.com",
+        "Content-Type": 1,
+        "re_try": 10,
+        "re_time": 1,
+        "s_time": 1,
+        "is_logger": False,
+        "is_json": False,
+    },
 }
