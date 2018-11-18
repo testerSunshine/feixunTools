@@ -51,7 +51,8 @@ def createOrderThread(data, session, ThreadId):
     :return:
     """
     U.Logging.info("订单线程{}启动..".format(ThreadId))
-    createOrderRsp = session.httpClint.send(urls.get("orderCreate", ""), data)
+    orderCreateUrls = urls.get("orderCreate", "") if session.orderType is 0 else urls.get("orderCreate2", "")  # 如果是下单接口2，就要用对应2的下单接口
+    createOrderRsp = session.httpClint.send(orderCreateUrls, data)
     if createOrderRsp and createOrderRsp.get("success", "") == "订单提交成功":
         U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp.get("success", "")))
         session.orderDone = True
@@ -107,6 +108,7 @@ def joinCreateOrder2(session):
                 U.Logging.info("账号: {} 库存不足,当前最多可售数量:0".format(session.userInfo.get("user", "")))
             else:
                 print(joinCreateOrderRsp)
+
 
 
 if __name__ == '__main__':

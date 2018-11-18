@@ -77,6 +77,18 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
+    "orderCreate2": {  # 下单2
+        "req_url": "/m/order-create.html",
+        "req_type": "get",
+        "Referer": "",
+        "Host": "mall.phicomm.com",
+        "Content-Type": 1,
+        "re_try": 10,
+        "re_time": 1,
+        "s_time": 1,
+        "is_logger": True,
+        "is_json": True,
+    },
     "checkOrderFast": {  # 进入订单页
         "req_url": "/m/checkout-fastbuy.html",
         "req_type": "post",
