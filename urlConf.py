@@ -221,7 +221,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "cartRemove": {  # 加入购物车
+    "cartRemove": {  # 删除购物车商品
         "req_url": "/m/cart-remove.html",
         "req_type": "post",
         "Referer": "",
