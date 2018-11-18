@@ -1,5 +1,6 @@
 import copy
 
+from CartRemove import cartRemove
 from CreateOrder import *
 from urlConf import urls
 
@@ -49,6 +50,7 @@ def addCart(session):
     :param session:
     :return:
     """
+    cartRemove(session, "goods_{}".format(session.pid))
     addCartUrls = copy.copy(urls["cartAdd"])
     addCartUrls["req_url"] = addCartUrls["req_url"].format(session.pid)
     addCartRsp = session.httpClint.send(addCartUrls)

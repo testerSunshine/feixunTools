@@ -221,4 +221,16 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
+    "cartRemove": {  # 加入购物车
+        "req_url": "/m/cart-remove.html",
+        "req_type": "post",
+        "Referer": "",
+        "Host": "mall.phicomm.com",
+        "Content-Type": 1,
+        "re_try": 10,
+        "re_time": 1,
+        "s_time": 1,
+        "is_logger": True,
+        "is_json": True,
+    },
 }
