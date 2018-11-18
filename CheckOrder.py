@@ -1,6 +1,6 @@
 import copy
 
-from CreateOrder import createOrder, joinCreateOrder
+from CreateOrder import *
 from urlConf import urls
 
 
@@ -35,4 +35,29 @@ def ajPriceProducts(session, product_id):
 
     checkOrderUrls["req_url"] = checkOrderUrls["req_url"].format(session.pid)
     session.httpClint.send(checkOrderUrls)
-    joinCreateOrder(session)
+    if session.orderType is 0:  # 常规下单
+        U.Logging.info("下单接口1")
+        joinCreateOrder(session)
+    else:
+        U.Logging.info("下单接口2")
+        addCart(session)
+
+
+def addCart(session):
+    """
+    将商品加入购物车
+    :param session:
+    :return:
+    """
+    addCartUrls = copy.copy(urls["cartAdd"])
+    addCartUrls["req_url"] = addCartUrls["req_url"].format(session.pid)
+    addCartRsp = session.httpClint.send(addCartUrls)
+    for _ in range(2):  # 防止没有加入购物车
+        if addCartRsp.get("success", "") == "操作成功":
+            break
+    joinCreateOrder2(session)
+
+
+
+
+

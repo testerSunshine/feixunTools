@@ -22,6 +22,7 @@ class fastOrderThread(threading.Thread):
         self.orderDone = False
         self.pid = pid
         self.WeiC = WeiC
+        self.orderType = 1
         self.checkVCodeTime = "10:59:55"
         self.isFastSnap = FastSnap  # 抢购时间点踩点打码，如果是测试，设置为False
         self.FastType = FastType  # 查单脚本，防止订单丢失

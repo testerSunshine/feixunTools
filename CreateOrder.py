@@ -10,7 +10,7 @@ from fateadm_api import fateadmJustice
 from urlConf import urls
 
 
-def createOrder(session, cartMd5, token, addrId):
+def createOrder(session, cartMd5, token):
     """
     下单
     :return:
@@ -78,13 +78,35 @@ def joinCreateOrder(session):
         try:
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
-            createOrder(session, cartMd5, token, "")
+            createOrder(session, cartMd5, token)
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
                 U.Logging.info(jsonJoinCreateOrderRsp.get("error"))
             except (JSONDecodeError, TypeError):
                 U.Logging.info(joinCreateOrderRsp)
+
+
+def joinCreateOrder2(session):
+    """
+    进入下单页
+    :return:
+    """
+    U.Logging.info("账号: {} cookie 已种植，正在下单".format(session.userInfo.get("user", "")))
+    while not session.orderDone:
+        joinCreateOrderUrls = urls.get("checkOrderFast2", "")
+        joinCreateOrderRsp = session.httpClint.send(joinCreateOrderUrls)
+        cartMd5Re = re.compile(r'cart_md5:"(\S+)"')
+        tokenRe = re.compile(r"'token':'(\S+)'")
+        try:
+            cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
+            token = re.search(tokenRe, joinCreateOrderRsp).group(1)
+            createOrder(session, cartMd5, token)
+        except (TypeError, AttributeError):
+            if "库存不足,当前最多可售数量:0" in joinCreateOrderRsp :
+                U.Logging.info("账号: {} 库存不足,当前最多可售数量:0".format(session.userInfo.get("user", "")))
+            else:
+                print(joinCreateOrderRsp)
 
 
 if __name__ == '__main__':
