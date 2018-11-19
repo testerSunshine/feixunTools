@@ -20,6 +20,7 @@ class fastOrderThread(threading.Thread):
         self.loginData = {}
         self.request_id = ""
         self.orderDone = False
+        self.isStock = False
         self.pid = pid
         self.WeiC = WeiC
         self.orderType = 1

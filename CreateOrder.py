@@ -15,6 +15,7 @@ def createOrder(session, cartMd5, token):
     下单
     :return:
     """
+    session.isStock = True
     U.Logging.info("检测到有库存，阻塞下单，等待验证码中")
     while not session.VCode:  # 等待验证码识别成功
         time.sleep(0.01)

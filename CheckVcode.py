@@ -23,30 +23,19 @@ def getVcode(session):
             break
         U.Logging.info("正在下载验证码")
         VcodeRsp = session.httpClint.send(vcodeUrls)
-        codeRsp, request_id = fateadm_code(VcodeRsp)
-        if codeRsp:
-            session.request_id = request_id
-            _VCode = codeRsp
-            session.VCode = _VCode
-            U.Logging.info("验证码识别成功，识别为: {}".format(_VCode))
-        # for i in range(2):
-        #     print("验证码第{}次识别".format(i+1))
-        #     VcodeRsp = session.httpClint.send(vcodeUrls)
-        #     codeRsp = R.rk_create(VcodeRsp, 4030)
-        #     if codeRsp and codeRsp.get("Result", ""):
-        #         _VCode = codeRsp.get("Result", "")
-        #         checkVCodeStatus = checkVCode(session, _VCode)
-        #         if checkVCodeStatus:
-        #             print("验证码识别成功，识别为: {}".format(_VCode))
-        #             session.VCode = _VCode
-        #             break
-        #         else:
-        #             session.VCode = ""
-        for _ in range(400):
-            if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
-                break
+        for _ in range(4000):
+            # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
+            #     break
+            if session.isStock and session.VCode == "":
+                codeRsp, request_id = fateadm_code(VcodeRsp)
+                if codeRsp:
+                    session.request_id = request_id
+                    _VCode = codeRsp
+                    session.VCode = _VCode
+                    U.Logging.info("验证码识别成功，识别为: {}".format(_VCode))
+                    session.isStock = False
             else:
-                time.sleep(0.1)
+                time.sleep(0.01)
         session.VCode = ""  # 设置验证码
         U.Logging.warn("验证码识别有效期超过45秒，正在重新识别")
 
