@@ -59,9 +59,9 @@ def createOrderThread(data, session, ThreadId):
         sendEmail("(接口返回成功，无订单号)", session.userInfo.get("user", ""), session.email)
     elif createOrderRsp.get("error") == "验证码错误":
         U.Logging.info("验证码错误")
-        createOrderThread = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
-        createOrderThread.setDaemon(True)
-        createOrderThread.start()
+        createOrderT = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
+        createOrderT.setDaemon(True)
+        createOrderT.start()
         session.VCode = ""
 
 
@@ -104,11 +104,10 @@ def joinCreateOrder2(session):
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
             createOrder(session, cartMd5, token)
         except (TypeError, AttributeError):
-            if "库存不足,当前最多可售数量:0" in joinCreateOrderRsp :
+            if "库存不足,当前最多可售数量:0" in joinCreateOrderRsp:
                 U.Logging.info("账号: {} 库存不足,当前最多可售数量:0".format(session.userInfo.get("user", "")))
             else:
                 print(joinCreateOrderRsp)
-
 
 
 if __name__ == '__main__':
