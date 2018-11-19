@@ -1,4 +1,5 @@
 import copy
+import datetime
 import time
 
 from fateadm_api import fateadm_code
@@ -27,13 +28,15 @@ def getVcode(session):
             # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
             #     break
             if session.isStock and session.VCode == "":
+                startTime = datetime.datetime.now()
                 codeRsp, request_id = fateadm_code(VcodeRsp)
                 if codeRsp:
                     session.request_id = request_id
                     _VCode = codeRsp
                     session.VCode = _VCode
-                    U.Logging.info("验证码识别成功，识别为: {}".format(_VCode))
+                    U.Logging.info("验证码识别成功，识别为: {}, 耗时: {}ms".format(_VCode, (datetime.datetime.now() - startTime).microseconds / 1000))
                     session.isStock = False
+
             else:
                 time.sleep(0.01)
         session.VCode = ""  # 设置验证码

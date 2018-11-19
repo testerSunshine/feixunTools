@@ -1,3 +1,4 @@
+import datetime
 import json
 import re
 import threading
@@ -72,6 +73,7 @@ def joinCreateOrder(session):
     :return:
     """
     U.Logging.info("账号: {} cookie 已种植，正在下单".format(session.userInfo.get("user", "")))
+    startTime = datetime.datetime.now()
     while not session.orderDone:
         joinCreateOrderUrls = urls.get("checkOrderFast", "")
         joinCreateOrderRsp = session.httpClint.send(joinCreateOrderUrls)
@@ -81,6 +83,7 @@ def joinCreateOrder(session):
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
             createOrder(session, cartMd5, token)
+            U.Logging.info("总共耗时：ms".format((datetime.datetime.now() - startTime).microseconds / 1000))
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
@@ -105,10 +108,11 @@ def joinCreateOrder2(session):
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
             createOrder(session, cartMd5, token)
         except (TypeError, AttributeError):
-            if "库存不足,当前最多可售数量:0" in joinCreateOrderRsp:
-                U.Logging.info("账号: {} 库存不足,当前最多可售数量:0".format(session.userInfo.get("user", "")))
-            else:
-                print(joinCreateOrderRsp)
+            try:
+                jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
+                U.Logging.info(jsonJoinCreateOrderRsp.get("error", ""))
+            except (JSONDecodeError, TypeError):
+                U.Logging.info(joinCreateOrderRsp)
 
 
 if __name__ == '__main__':
