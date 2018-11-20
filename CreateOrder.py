@@ -7,6 +7,7 @@ from json import JSONDecodeError
 import Utils as U
 from HttpUtils import HttpClient
 from emailConf import sendEmail
+from fateadm_api import fateadm_code
 from urlConf import urls
 
 
@@ -22,7 +23,7 @@ def createOrder(session, cartMd5, token):
     U.Logging.info("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
     data = {
         "cart_md5":	cartMd5,
-        "addr_id":	session.addrId,
+        "addr_id":	758037,
         "dlytype_id": 1,
         "payapp_id": "alipay",
         "need_invoice":	"true",
@@ -115,5 +116,4 @@ def joinCreateOrder2(session):
 
 
 if __name__ == '__main__':
-    httpClint = HttpClient()
-    str
+    pass
