@@ -7,8 +7,6 @@ from json import JSONDecodeError
 import Utils as U
 from HttpUtils import HttpClient
 from emailConf import sendEmail
-from fateadm_api import fateadmJustice
-
 from urlConf import urls
 
 
@@ -106,6 +104,7 @@ def joinCreateOrder2(session):
         try:
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
+            session.httpClint.get_cookies()
             createOrder(session, cartMd5, token)
         except (TypeError, AttributeError):
             try:
