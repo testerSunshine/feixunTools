@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 import random
@@ -130,6 +131,7 @@ class HttpClient(object):
             try:
                 sleep(urls.get("s_time", 0.001))
                 requests.packages.urllib3.disable_warnings()
+                startTime = datetime.datetime.now()
                 response = self._s.request(method=method,
                                            timeout=20,
                                            url="https://" + self._cdn[random.randint(0, len(self._cdn) - 1)] + urls[
@@ -178,6 +180,7 @@ class HttpClient(object):
                 #     U.Logging.error("400返回，重新 生成cookie")
                 #     self.del_cookies_by_key("__jsl_clearance")
                 if response.status_code == 200 or response.status_code == 201:
+                    U.Logging.info("请求完成，不包括请求等待和封ip等待，只考虑网络io，参考耗时: {}ms".format((datetime.datetime.now() - startTime).microseconds / 1000))
                     if response.content:
                         if is_logger:
                             U.Logging.info(
