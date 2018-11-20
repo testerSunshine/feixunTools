@@ -82,9 +82,9 @@ def joinCreateOrder(session):
         try:
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
+            U.Logging.info(session.httpClint.cookies.get_dict())
             createOrder(session, cartMd5, token)
             U.Logging.info("总共耗时：ms".format((datetime.datetime.now() - startTime).microseconds / 1000))
-            U.Logging.info(session.httpClint.cookies.get_dict())
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
