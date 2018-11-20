@@ -39,6 +39,7 @@ class fastOrderThread(threading.Thread):
         if self.isSuperOrder is 1:
             U.Logging.info("超级下单模式启动！！！")
             self.httpClint.set_cookies(**{'__jsl_clearance': '1542724753.772|0|jEk7Pox1MgRAqWglunFCxiwTcQo%3D', 'CACHE_VARY': '6e04e60e11bbf84e0cb12445f159bacd-9244d31d67c9dff15c6a27bbbb77f6ac', 'MEMBER_IDENT': '6527184', 'MEMBER_LEVEL_ID': '1', 'UNAME': '15618715583', '_SID': 'a1d2a1e22a9353eef6d8ca3d0473d237', '_VMC_UID': 'fd324c0d6731f564aa3f09cf249067cf', '__jsluid': '1f332e270ca18439f914d862d1f065a1'})
+            self.isStock = True
             getVcode(self)
             createOrder(self, "912062478dab182484af7324ce5a3561", "413c771f53a3095d66cd389458ded39f")
         else:
