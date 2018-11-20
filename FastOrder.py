@@ -40,7 +40,7 @@ class fastOrderThread(threading.Thread):
             U.Logging.info("超级下单模式启动！！！")
             self.httpClint.set_cookies(**{'__jsl_clearance': '1542724753.772|0|jEk7Pox1MgRAqWglunFCxiwTcQo%3D', 'CACHE_VARY': '6e04e60e11bbf84e0cb12445f159bacd-9244d31d67c9dff15c6a27bbbb77f6ac', 'MEMBER_IDENT': '6527184', 'MEMBER_LEVEL_ID': '1', 'UNAME': '15618715583', '_SID': 'a1d2a1e22a9353eef6d8ca3d0473d237', '_VMC_UID': 'fd324c0d6731f564aa3f09cf249067cf', '__jsluid': '1f332e270ca18439f914d862d1f065a1'})
             self.isStock = True
-            self.userInfo = 6527184
+            self.loginData = {"member_lv_id":"1","experience": None,"order_num":24,"member_id":"6527184"}
             t = threading.Thread(target=getVcode, args=(self,))  # 验证码线程
             t.setDaemon(True)
             t.start()
