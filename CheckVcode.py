@@ -22,8 +22,9 @@ def getVcode(session):
     while True:
         if session.orderDone:
             break
-        U.Logging.info("正在下载验证码")
+        U.Logging.info("正在缓存验证码")
         VcodeRsp = session.httpClint.send(vcodeUrls)
+        U.Logging.info("缓存验证码成功")
         for _ in range(4000):
             # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
             #     break
