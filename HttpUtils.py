@@ -62,6 +62,15 @@ class HttpClient(object):
         for k, v in kwargs.items():
             self._s.cookies.set(k, v)
 
+    def get_cookies(self):
+        """
+        获取cookie
+        :return:
+        """
+        cookies = self._s.cookies.get_dict()
+        U.Logging.info("cookies: {}".format(cookies))
+        return cookies
+
     def del_cookies(self):
         """
         删除所有的key

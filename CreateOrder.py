@@ -5,6 +5,7 @@ import threading
 import time
 from json import JSONDecodeError
 import Utils as U
+from HttpUtils import HttpClient
 from emailConf import sendEmail
 from fateadm_api import fateadmJustice
 
@@ -73,7 +74,6 @@ def joinCreateOrder(session):
     :return:
     """
     U.Logging.info("账号: {} cookie 已种植，正在下单".format(session.userInfo.get("user", "")))
-    startTime = datetime.datetime.now()
     while not session.orderDone:
         joinCreateOrderUrls = urls.get("checkOrderFast", "")
         joinCreateOrderRsp = session.httpClint.send(joinCreateOrderUrls)
@@ -82,9 +82,8 @@ def joinCreateOrder(session):
         try:
             cartMd5 = re.search(cartMd5Re, joinCreateOrderRsp).group(1)
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
-            U.Logging.info(session.httpClint.cookies.get_dict())
+            session.httpClint.get_cookies()
             createOrder(session, cartMd5, token)
-            U.Logging.info("总共耗时：ms".format((datetime.datetime.now() - startTime).microseconds / 1000))
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
@@ -117,7 +116,5 @@ def joinCreateOrder2(session):
 
 
 if __name__ == '__main__':
-    a = '11111111111111111'
-    addrIdRe = re.compile(r'{"addr_id":"(\S+)"')
-    addrId = re.search(addrIdRe, a).group(1) or "11"
-    print()
+    httpClint = HttpClient()
+    str
