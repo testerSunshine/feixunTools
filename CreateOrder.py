@@ -59,6 +59,8 @@ def createOrderThread(data, session, ThreadId):
         U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp.get("success", "")))
         sendEmail("(接口返回成功，无订单号)", session.userInfo.get("user", ""), session.email)
         session.orderDone = True
+    else:
+        U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp))
     # elif createOrderRsp.get("error") == "验证码错误":
     #     U.Logging.info("验证码错误")
     #     createOrderT = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
