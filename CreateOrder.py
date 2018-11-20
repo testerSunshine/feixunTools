@@ -59,12 +59,12 @@ def createOrderThread(data, session, ThreadId):
         U.Logging.info("账号: {} {}".format(session.userInfo.get("user", ""), createOrderRsp.get("success", "")))
         sendEmail("(接口返回成功，无订单号)", session.userInfo.get("user", ""), session.email)
         session.orderDone = True
-    elif createOrderRsp.get("error") == "验证码错误":
-        U.Logging.info("验证码错误")
-        createOrderT = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
-        createOrderT.setDaemon(True)
-        createOrderT.start()
-        session.VCode = ""
+    # elif createOrderRsp.get("error") == "验证码错误":
+    #     U.Logging.info("验证码错误")
+    #     createOrderT = threading.Thread(target=fateadmJustice, args=(session.request_id,))  # 打码错误调取退款接口
+    #     createOrderT.setDaemon(True)
+    #     createOrderT.start()
+    #     session.VCode = ""
 
 
 def joinCreateOrder(session):
@@ -84,6 +84,7 @@ def joinCreateOrder(session):
             token = re.search(tokenRe, joinCreateOrderRsp).group(1)
             createOrder(session, cartMd5, token)
             U.Logging.info("总共耗时：ms".format((datetime.datetime.now() - startTime).microseconds / 1000))
+            U.Logging.info(session.httpClint.cookies.get_dict())
         except (TypeError, AttributeError):
             try:
                 jsonJoinCreateOrderRsp = json.loads(joinCreateOrderRsp)
