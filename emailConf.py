@@ -1,10 +1,10 @@
 # -*- coding: utf8 -*-
-import time
-
 __author__ = 'MR.wen'
+import time
 from email.header import Header
 from email.mime.text import MIMEText
 import smtplib
+import Utils as U
 
 
 def sendEmail(msg, account, email):
@@ -27,11 +27,16 @@ def sendEmail(msg, account, email):
     msg['To'] = receiver
 
     smtp = smtplib.SMTP_SSL()
-    smtp.connect(host)
-    smtp.login(username, password)
-    smtp.sendmail(sender, receiver.split(","), msg.as_string())
-    smtp.quit()
-    print("邮件已通知, 请查收")
+    for i in range(3):  # 邮件发送失败重试三次
+        try:
+            smtp.connect(host)
+            smtp.login(username, password)
+            smtp.sendmail(sender, receiver.split(","), msg.as_string())
+            smtp.quit()
+            U.Logging.success("email send success.")
+            break
+        except (smtplib.SMTPServerDisconnected, smtplib.SMTPAuthenticationError):
+            time.sleep(1)
 
 
 if __name__ == '__main__':
