@@ -63,7 +63,7 @@ def parser_arguments(argv):
     parser.add_argument("--FastSnap", type=int, default=0, help="是否开启踩点打码, 0关闭，1开启")
     parser.add_argument("--pid", type=int, default=0, required=True, help="商品id")
     parser.add_argument("--WeiC", type=int, default=0, required=True, help="商品对打使用维C数量")
-    parser.add_argument("--isSuperOrder", type=int, default=1, help="超级下单模式")
+    parser.add_argument("--isSuperOrder", type=int, default=0, help="超级下单模式")
     return parser.parse_args(argv)
 
 

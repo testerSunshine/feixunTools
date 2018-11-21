@@ -23,7 +23,7 @@ def createOrder(session, cartMd5, token):
     U.Logging.info("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
     data = {
         "cart_md5":	cartMd5,
-        "addr_id":	758037,
+        "addr_id":	session.addrId,
         "dlytype_id": 1,
         "payapp_id": "alipay",
         "need_invoice":	"true",
@@ -39,7 +39,6 @@ def createOrder(session, cartMd5, token):
     createOrderThreadPool = []
     for i in range(4):
         t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
-        t.setDaemon(True)
         createOrderThreadPool.append(t)
     for t in createOrderThreadPool:
         t.start()
