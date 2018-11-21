@@ -5,9 +5,7 @@ import threading
 import time
 from json import JSONDecodeError
 import Utils as U
-from HttpUtils import HttpClient
 from emailConf import sendEmail
-from fateadm_api import fateadm_code
 from urlConf import urls
 
 
@@ -39,6 +37,7 @@ def createOrder(session, cartMd5, token):
     createOrderThreadPool = []
     for i in range(4):
         t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
+        t.setDaemon(True)
         createOrderThreadPool.append(t)
     for t in createOrderThreadPool:
         t.start()

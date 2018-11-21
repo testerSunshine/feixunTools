@@ -188,7 +188,7 @@ class HttpClient(object):
                 # if response.status_code == 400:
                 #     U.Logging.error("400返回，重新 生成cookie")
                 #     self.del_cookies_by_key("__jsl_clearance")
-                if response.status_code == 200 or response.status_code == 201:
+                elif response.status_code == 200 or response.status_code == 201:
                     U.Logging.info("请求{}完成，不包括请求等待和封ip等待，只考虑网络io，参考耗时: {}ms".format(urls["req_url"], (datetime.datetime.now() - startTime).microseconds / 1000))
                     if response.content:
                         if is_logger:
