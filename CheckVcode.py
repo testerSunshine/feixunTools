@@ -13,18 +13,18 @@ def getVcode(session):
     :return:
     """
     U.Logging.info("识别验证码线程启动...")
-    if session.isFastSnap:
-        while time.strftime('%H:%M:%S', time.localtime(time.time())) < session.checkVCodeTime:
-            pass
-    U.Logging.info("抢购时间点，开始自动打码")
+    # if session.isFastSnap:
+    #     while time.strftime('%H:%M:%S', time.localtime(time.time())) < session.checkVCodeTime:
+    #         time.sleep(0.05)
+    # U.Logging.info("抢购时间点，开始自动打码")
     vcodeUrls = copy.copy(urls.get("vcode", ""))
     vcodeUrls["req_url"] = vcodeUrls["req_url"].format(session.loginData.get("member_id"))
     while True:
         if session.orderDone:
             break
-        U.Logging.info("正在缓存验证码")
+        U.Logging.info("用户{}: 正在缓存验证码".format(session.userInfo.get("user", "")))
         VcodeRsp = session.httpClint.send(vcodeUrls)
-        U.Logging.info("缓存验证码成功")
+        U.Logging.info("用户{}: 缓存验证码成功".format(session.userInfo.get("user", "")))
         for _ in range(4000):
             # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
             #     break
@@ -41,7 +41,7 @@ def getVcode(session):
             else:
                 time.sleep(0.01)
         session.VCode = ""  # 设置验证码
-        U.Logging.warn("验证码识别有效期超过45秒，正在重新识别")
+        U.Logging.warn("用户{}: 验证码识别有效期超过45秒，正在重新识别".format(session.userInfo.get("user", "")))
 
 
 def checkVCode(session, vCode):

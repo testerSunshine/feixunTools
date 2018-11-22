@@ -15,7 +15,7 @@ def createOrder(session, cartMd5, token):
     :return:
     """
     session.isStock = True
-    U.Logging.info("检测到有库存，阻塞下单，等待验证码中")
+    U.Logging.info("账号:{} 检测到有库存，阻塞下单，等待验证码中".format(session.userInfo.get("user", "")))
     while not session.VCode:  # 等待验证码识别成功
         time.sleep(0.01)
     U.Logging.info("账号:{} 验证码提交通过，下单中".format(session.userInfo.get("user", "")))
@@ -34,23 +34,24 @@ def createOrder(session, cartMd5, token):
         "useDdwNum": 0,
         "token": token,
     }
-    createOrderThreadPool = []
-    for i in range(4):
-        t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
-        t.setDaemon(True)
-        createOrderThreadPool.append(t)
-    for t in createOrderThreadPool:
-        t.start()
+    createOrderThread(data, session,)
+    # createOrderThreadPool = []
+    # for i in range(3):
+    #     t = threading.Thread(target=createOrderThread, args=(data, session, i+1))
+    #     t.setDaemon(True)
+    #     createOrderThreadPool.append(t)
+    # for t in createOrderThreadPool:
+    #     t.start()
 
 
-def createOrderThread(data, session, ThreadId):
+def createOrderThread(data, session):
     """
     提交订单线程
     :param data:
     :param session:
     :return:
     """
-    U.Logging.info("订单线程{}启动..".format(ThreadId))
+    U.Logging.info("订单线程{}启动..".format(session.userInfo.get("user", "")))
     orderCreateUrls = urls.get("orderCreate", "") if session.orderType is 0 else urls.get("orderCreate2", "")  # 如果是下单接口2，就要用对应2的下单接口
     createOrderRsp = session.httpClint.send(orderCreateUrls, data)
     if createOrderRsp and createOrderRsp.get("success", "") == "订单提交成功":

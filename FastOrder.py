@@ -73,7 +73,7 @@ if __name__ == '__main__':
     pwd = args.pwd
     email = args.email
     isSuperOrder = args.isSuperOrder
-    FastSnap = args.FastSnap
+    FastSnap = 0  # 踩点打码默认先关闭
     FastType = args.FastType
     pid = args.pid
     WeiC = args.WeiC
