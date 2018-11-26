@@ -28,36 +28,35 @@ def getVcode(session):
         for _ in range(4000):
             # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
             #     break
-            if session.isStock and session.VCode == "":
-                startTime = datetime.datetime.now()
-                codeRsp, request_id = fateadm_code(VcodeRsp)
-                if codeRsp:
-                    session.request_id = request_id
-                    _VCode = codeRsp
-                    session.VCode = _VCode
-                    U.Logging.info("验证码识别成功，识别为: {}, 耗时: {}ms".format(_VCode, (datetime.datetime.now() - startTime).microseconds / 1000))
-                    session.isStock = False
-
+            if session.VCode == "":
+                if session.isFastSnap is 1:
+                    U.Logging.info("监督库存打码")
+                    if session.isStock:
+                        checkVCode(session, VcodeRsp)
+                elif session.isFastSnap is 0:
+                    U.Logging.info("捡漏模式打码")
+                    checkVCode(session, VcodeRsp)
             else:
                 time.sleep(0.01)
         session.VCode = ""  # 设置验证码
         U.Logging.warn("用户{}: 验证码识别有效期超过45秒，正在重新识别".format(session.userInfo.get("user", "")))
 
 
-def checkVCode(session, vCode):
+def checkVCode(session, VcodeRsp):
     """
-    校验验证码
+    识别验证码
     :param session:
     :return:
     """
-    checkVCodeUrls = urls.get("checkVcode", '')
-    data = {
-        "vcode": vCode,
-        "member_id": session.loginData["member_id"]
-    }
-    checkVCodeRsp = session.httpClint.send(checkVCodeUrls, data)
-    if checkVCodeRsp and checkVCodeRsp.get("result", "") == "success":
-        return vCode
+    startTime = datetime.datetime.now()
+    codeRsp, request_id = fateadm_code(VcodeRsp)
+    if codeRsp:
+        session.request_id = request_id
+        _VCode = codeRsp
+        session.VCode = _VCode
+        U.Logging.info(
+            "验证码识别成功，识别为: {}, 耗时: {}ms".format(_VCode, (datetime.datetime.now() - startTime).microseconds / 1000))
+        session.isStock = False
 
 
 if __name__ == '__main__':

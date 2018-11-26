@@ -7,7 +7,7 @@ import smtplib
 import Utils as U
 
 
-def sendEmail(msg, account, email):
+def sendEmail(msg, account, email, url):
     """
     邮件通知
     :param str: email content
@@ -19,9 +19,24 @@ def sendEmail(msg, account, email):
     username = "931128603@qq.com"
     password = "xrvenridfpnnbehh"
     host = "smtp.qq.com"
-    s = "订单编号: {}, 付款地址: https://mall.phicomm.com/my-vclist.html, 如果重复发送请忽略。".format(msg)
 
-    msg = MIMEText(s, 'plain', 'utf-8')  # 中文需参数‘utf-8’，单字节字符不需要
+    s1 = """
+     <html>
+        <body>
+                <span class="title">订单编号: </span>
+                <br>
+                {}
+                <br>
+                <span class="title">付款地址请点下方: </span>
+                <br>
+                <a href="{}">点我付款</a>
+                <br><br>
+            </p>
+        </body>
+    </html> 
+    """.format(msg, url)
+
+    msg = MIMEText(s1, 'html', 'utf-8')  # 中文需参数‘utf-8’，单字节字符不需要
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = sender
     msg['To'] = receiver

@@ -60,7 +60,7 @@ def parser_arguments(argv):
     parser.add_argument("--FastType", type=int, default=0, required=True, help="0下单，1查单")
     parser.add_argument("--pwd", type=str, default="", required=True, help="密码，必填！")
     parser.add_argument("--email", type=str, default="931128603@qq.com", help="邮件通知人,多人用英文逗号隔开")
-    parser.add_argument("--FastSnap", type=int, default=0, help="是否开启踩点打码, 0关闭，1开启")
+    parser.add_argument("--FastSnap", type=int, default=0, help="打码模式, 0捡漏模式,1库存模式")
     parser.add_argument("--pid", type=int, default=0, required=True, help="商品id")
     parser.add_argument("--WeiC", type=int, default=0, required=True, help="商品对打使用维C数量")
     parser.add_argument("--isSuperOrder", type=int, default=0, help="超级下单模式")
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     pwd = args.pwd
     email = args.email
     isSuperOrder = args.isSuperOrder
-    FastSnap = 0  # 踩点打码默认先关闭
+    FastSnap = args.FastSnap
     FastType = args.FastType
     pid = args.pid
     WeiC = args.WeiC

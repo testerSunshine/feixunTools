@@ -150,41 +150,37 @@ class HttpClient(object):
                                            verify=False,
                                            **kwargs)
                 if response.status_code == 521:
-                    try:
                         txt_521 = ''.join(re.findall('<script>(.*?)</script>', response.content.decode()))
-                        func_return = txt_521.replace('eval', 'return')
+                        func_return = txt_521.replace('eval', "return")
                         content = execjs.compile(func_return)
                         evaled_func = content.call('f').replace("document.cookie=", "return ").split("{document.addEventListener")[0].split(";if((function(){try{return")[0]\
                             .replace("window", """[]["filter"]["constructor"]("return this")()""")\
                             .replace("setTimeout('location.href=location.pathname+location.search.replace(/[\?|&]captcha-challenge/,\\'\\')',1500);", "")
-                        print(evaled_func)
                         evaled_func_re = re.findall('var (.*?)=function\(\)', evaled_func)[0]
 
-                        # evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
-                        # evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
-                        # evaled_func_2 = evaled_func.replace(
-                        #     "var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
-                        #     .format(evaled_func_re,
-                        #             evaled_func_re,
-                        #             evaled_func_reb,
-                        #             evaled_func_re,
-                        #             evaled_func_re,
-                        #             evaled_func_rea,
-                        #             evaled_func_re,
-                        #             evaled_func_re,
-                        #             evaled_func_re,
-                        #             evaled_func_rea,
-                        #             ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
-                        #         evaled_func_rea, evaled_func_re))
-                        # evaled_func_2 = evaled_func.replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re)).replace("return return", "return")
-                        cookie_c = execjs.compile(evaled_func)
+                        evaled_func_rea = re.findall('.firstChild.href;var (.*?)=', evaled_func)[0]
+                        evaled_func_reb = re.findall('<a href=\\\\\'/\\\\\'>(.*?)</a>', evaled_func)[0]
+                        evaled_func_2 = evaled_func.replace(
+                            "var {0}=document.createElement('div');{1}.innerHTML='<a href=\\'/\\'>{2}</a>';{3}={4}.firstChild.href;var {5}={6}.match(/https?:\/\//)[0];{7}={8}.substr({9}.length).toLowerCase()"
+                            .format(evaled_func_re,
+                                    evaled_func_re,
+                                    evaled_func_reb,
+                                    evaled_func_re,
+                                    evaled_func_re,
+                                    evaled_func_rea,
+                                    evaled_func_re,
+                                    evaled_func_re,
+                                    evaled_func_re,
+                                    evaled_func_rea,
+                                    ), 'var {0} = "https://"; var {1} = "mall.phicomm.com/"'.format(
+                                evaled_func_rea, evaled_func_re))
+                        evaled_func_2 = evaled_func_2.replace("""('String.fromCharCode('+{0}+')')""".format(evaled_func_re), " String.fromCharCode({})".format(evaled_func_re)).replace("return return", "return")
+                        cookie_c = execjs.compile(evaled_func_2)
                         cookie = cookie_c.call(evaled_func_re).split(";")[0].split("=")
                         if cookie[1].find("\x00") != -1:
                             U.Logging.error("无效cookie: {}".format(cookie))
                             continue
                         self.set_cookies(**{cookie[0]: cookie[1]})
-                    except:
-                        pass
                 # if response.status_code == 400:
                 #     U.Logging.error("400返回，重新 生成cookie")
                 #     self.del_cookies_by_key("__jsl_clearance")
@@ -223,7 +219,3 @@ if __name__ == '__main__':
     var _37=function(){return '__jsl_clearance=1542106851.717|0|'+(function(){var _3d=[function(_37){return _37},function(_3d){return _3d},(function(){var _3d = "https://"; var _37 = "mall.phicomm.com/";return function(_3d){for(var _38=0;_38<_3d.length;_38++){_3d[_38]=_37.charAt(_3d[_38])};return _3d.join('')}})(),function(_37){return String.fromCharCode(_37)}],_38=['8',[-~[]+(-~-~~~''^-~~~'')+5],[((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])+[-~[]+(-~-~~~''^-~~~'')+5]],[[-~[]+(-~-~~~''^-~~~'')+5]],'XwU',[(-~{}+[[]][0])+(-~[]-~[]+[]+[])+(-~[]-~[]+[]+[])],'zn',[(-~{}+[[]][0])],[(-~{}+[[]][0])+(-~{}+[[]][0])+((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])],'U',[((-~[]-~[])*[-~((-~[]|(-~~~''<<-~~~'')))]+[])+[-~[]+(-~-~~~''^-~~~'')+5]],'3',[[-~[6]]+(~~''+[]+[])],[![]+[]+[[]][0]][0].charAt((-~~~''+[2]>>2)),'I',[-~(4)],'Ut',[(-~{}+[[]][0])+(-~{}+[[]][0])+[-~[]+(-~-~~~''^-~~~'')+5]],({}+[]).charAt(-~(8))+(~~''+[]+[]),'txc',[[(-~-~~~''^-~~~'')]+[-~[6]]],'3D'];for(var _37=0;_37<_38.length;_37++){_38[_37]=_3d[[1,0,3,2,1,3,1,2,3,1,3,1,3,0,1,0,1,3,0,1,3,1][_37]](_38[_37])};return _38.join('')})()+';Expires=Tue, 13-Nov-18 12:00:51 GMT;Path=/;'}
     """)
     print(a.call("_37"))
-
-
-
-
