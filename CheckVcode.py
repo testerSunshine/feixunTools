@@ -29,11 +29,12 @@ def getVcode(session):
             # if session.VCode == "":   # 如果检测到验证码识别失败了，立即重新识别验证码
             #     break
             if session.VCode == "":
-                if session.isFastSnap is 1:
-                    if session.isStock:
-                        checkVCode(session, VcodeRsp)
+                if session.isFastSnap is 1 and session.isStock:
+                    checkVCode(session, VcodeRsp)
                 elif session.isFastSnap is 0:
                     checkVCode(session, VcodeRsp)
+                else:
+                    time.sleep(0.01)
             else:
                 time.sleep(0.01)
         session.VCode = ""  # 设置验证码
