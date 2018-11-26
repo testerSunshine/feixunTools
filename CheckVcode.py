@@ -30,11 +30,9 @@ def getVcode(session):
             #     break
             if session.VCode == "":
                 if session.isFastSnap is 1:
-                    U.Logging.info("监督库存打码")
                     if session.isStock:
                         checkVCode(session, VcodeRsp)
                 elif session.isFastSnap is 0:
-                    U.Logging.info("捡漏模式打码")
                     checkVCode(session, VcodeRsp)
             else:
                 time.sleep(0.01)
